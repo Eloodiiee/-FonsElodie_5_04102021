@@ -23,6 +23,13 @@ await fetch("http://localhost:3000/api/products/"+_id)
   
    fetchProductById()
 
+   //-------------****Génération d'ID en hexadécimal pour que le filter ne supprime pas deux même items, même s'ils ont des couleurs différentes****----
+   let id = 0;
+   function randomHexId(){
+   id = Math.floor(Math.random()*(1677721500000)).toString(16);
+   return id;
+}
+
 
 //------------La gestion de mon panier--------------
 
@@ -65,6 +72,7 @@ Cartbtn.addEventListener("click", (event) => {
    let qtyNumber = parseInt(quantityNumber()); //------Convertie du texte en nombre entier------
    let prdtName = productName(); //------Execute la fonction productname pour sauvegarder le résultat de prdtname------
    let colorprdt = productClr();
+   let idDeletion = randomHexId();//------**Exécute la fonction qui génère un ID en hexadecimal**----
    let price = parseInt(Price()); //------Convertie du texte en nombre entier------
    let totalPrice = price * qtyNumber;
    let cartItem = {
@@ -76,7 +84,7 @@ Cartbtn.addEventListener("click", (event) => {
       totalPrice : totalPrice,
       imageUrl : fetchedProduct.imageUrl,
       altTxt : fetchedProduct.altTxt,
-
+      idDeletion : idDeletion, //----**Attribution de l'ID de suppression**----
    }
    console.log(colorprdt);
       if(colorprdt && qtyNumber){
