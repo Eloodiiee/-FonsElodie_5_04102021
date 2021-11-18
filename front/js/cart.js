@@ -1,19 +1,20 @@
+if(window.location.href == "http://127.0.0.1:5500/front/html/cart.html"){
 let cart  = JSON.parse(localStorage.getItem("cartItems"))||[];
 const cartContent = document.querySelector("#cart__items");
 //------Tentative de detection de doublon dans le panier------
-
+for(let k = 0;k<cart.length;k++){
 for(let article of cart){
   console.log(article);
   console.log(article.productId);
-  if(article.productId == cart[0].productId && article.color == cart[0].color){
+  if(article.productId == cart[k].productId && article.color == cart[k].color){
     let newQuantity = 0;
-    newQuantity = parseInt(article.quantityProduct)+parseInt(cart[0].quantityProduct);
+    newQuantity = parseInt(article.quantityProduct)+parseInt(cart[k].quantityProduct);
     console.log("article :"+ article.quantityProduct);
-    console.log("cart :"+ cart[0].quantityProduct);
+    console.log("cart :"+ cart[k].quantityProduct);
     console.log(newQuantity);
   }
 }
-
+}
 //------Si le panier est vide afficher "le panier est vide"------
 if(cart === null || cart == 0 ){
   const emptyCart = `
@@ -147,27 +148,27 @@ console.log(btnSendFormular);
 products: cart.map(item=>item.productId)
 
   }
-  
+
   fetch("http://localhost:3000/api/products/order",{method:"POST",body:JSON.stringify(order), headers: { "Content-Type": "application/json" }})
   .then(response=>response.json())
   .then(data=>{
     localStorage.clear();
     localStorage.setItem("orderId",data.orderId)
     window.location.href = "confirmation.html";
-
+ 
   })
   .catch(error=>console.log(error))
 
       //Create an object item JSON to stock all the datas in the local storage
     //localStorage.clear();
 
-    //const send = {
-      //productLocalStorage,
-      //contact
-    //}
-   
   
-  })
-  
-
+  })}
+  if(window.location.href == "http://127.0.0.1:5500/front/html/confirmation.html"){
+    const spanId  = document.getElementById("orderId");
+    console.log(spanId);
+    let confirmationId = localStorage.getItem("orderId");
+    console.log(confirmationId);
+    spanId.innerHTML = confirmationId;
+}
 
