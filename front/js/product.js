@@ -100,7 +100,6 @@ Cartbtn.addEventListener("click", (event) => {
          localStorage.setItem("cartItems",JSON.stringify(cartItems.concat(cartItem)))
       }
       
-     
    }
    else{
       alert("Veuillez ajouter une couleur et une quantitée")

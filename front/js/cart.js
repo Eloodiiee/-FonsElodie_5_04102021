@@ -199,8 +199,7 @@ products: cart.map(item=>item.productId)
         let cityNameErrorMess = document.getElementById('cityErrorMsg'); 
         cityNameErrorMess.textContent = ("Le champs Ville renseigné n'est pas correct !"); 
 
-        return false;
-            
+        return false;        
     };
   };
 
