@@ -1,10 +1,10 @@
-
+//------Récupère l'ID de l'item pour l'afficher sur la page------
 const currentUrl = (new URL(document.location)).searchParams ;   
 const _id = currentUrl.get('id');
 let fetchedProduct = null
 
 
-
+//------On récupère l'item depuis son array pour l'afficher suer la page------
 const fetchProductById = async() =>{
 await fetch("http://localhost:3000/api/products/"+_id)
    .then(response =>{return response.json()})
@@ -21,7 +21,7 @@ await fetch("http://localhost:3000/api/products/"+_id)
   
    fetchProductById()
 
-   //-------------****Génération d'ID en hexadécimal pour que le filter ne supprime pas deux même items, même s'ils ont des couleurs différentes****----
+   //-------------Génération d'ID en hexadécimal pour que le filter ne supprime pas deux même items, même s'ils ont des couleurs différentes----
    let id = 0;
    function randomHexId(){
    id = Math.floor(Math.random()*(1677721500000)).toString(16);
@@ -70,7 +70,7 @@ Cartbtn.addEventListener("click", (event) => {
    let qtyNumber = parseInt(quantityNumber()); //------Convertie du texte en nombre entier------
    let prdtName = productName(); //------Execute la fonction productname pour sauvegarder le résultat de prdtname------
    let colorprdt = productClr();
-   let idDeletion = randomHexId();//------**Exécute la fonction qui génère un ID en hexadecimal**----
+   let idDeletion = randomHexId();//------Exécute la fonction qui génère un ID en hexadecimal----
    let price = parseInt(Price()); //------Convertie du texte en nombre entier------
    let totalPrice = price * qtyNumber;
    let cartItem = {
@@ -82,13 +82,13 @@ Cartbtn.addEventListener("click", (event) => {
       totalPrice : totalPrice,
       imageUrl : fetchedProduct.imageUrl,
       altTxt : fetchedProduct.altTxt,
-      idDeletion : idDeletion, //----**Attribution de l'ID de suppression**----
+      idDeletion : idDeletion, //----Attribution de l'ID de suppression----
    }
- 
+ //---------Détection de doublon dans la panier à partir de la couleur et de l'ID et les cumule s'il en trouve------ 
       if(colorprdt && qtyNumber){
       const localStorage = window.localStorage 
       const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [] 
-      if(cartItems.some(item=>item.productId === cartItem.productId) && cartItems.some(item=>item.color === cartItem.color)){ ////on verifie l'existence du cartitem qu'on va ajouter dans le localstorage si oui on incremente sont prix , son total et sa quantité sinon on l'ajoute au localstorage normalement
+      if(cartItems.some(item=>item.productId === cartItem.productId) && cartItems.some(item=>item.color === cartItem.color)){ //------on verifie l'existence du cartitem qu'on va ajouter dans le localstorage si oui on incremente sont prix , son total et sa quantité sinon on l'ajoute au localstorage normalement
       const itemToAdd = cartItems.find(item=>item.productId===cartItem.productId)
       itemToAdd.quantityProduct+=cartItem.quantityProduct
       itemToAdd.totalPrice+=cartItem.totalPrice

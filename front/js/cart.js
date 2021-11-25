@@ -1,17 +1,10 @@
+//----Permet de raccourcir le lien au test de la page----
 const currentUrl = window.location.pathname ;
 let cutUrl = currentUrl.slice(12)
+//----Test pour savoir si on est sur la bonne page, pour qu'il s'exécute sinon il est ignoré----
 if(cutUrl == "cart.html"){
 let cart  = JSON.parse(localStorage.getItem("cartItems"))||[];
 const cartContent = document.querySelector("#cart__items");
-//------Tentative de detection de doublon dans le panier------
-for(let k = 0;k<cart.length;k++){
-for(let article of cart){
-  if(article.productId == cart[k].productId && article.color == cart[k].color){
-    let newQuantity = 0;
-    newQuantity = parseInt(article.quantityProduct)+parseInt(cart[k].quantityProduct);
-  }
-}
-}
 //------Si le panier est vide afficher "le panier est vide"------
 if(cart === null || cart == 0 ){
   const emptyCart = `
@@ -119,12 +112,12 @@ window.location.href = "cart.html";
 }
   
 const btnSendFormular = document.getElementById("order")
-//let btnSendFormular = document.getElementsByClassName("cart__order__form__submit");
 
-//-------------- The btn with all the instructions for formular send --------------
+
+//--------------Au clic du bouton "commander", enregistre les informations du formulaire, tout en testant si les données sont correctes--------------
   btnSendFormular.addEventListener("click", (eventSecure) =>{
     eventSecure.preventDefault();
-    //Formulaire client
+    //----Formulaire client----
   
   const order = {
   contact: {
@@ -140,7 +133,7 @@ products: cart.map(item=>item.productId)
 
   }
    
-  //First name check with regex
+  //----Test de validité du Prénom avec la methode regex------
   function firstNameCheck() {
 
     const firstNameT = order.contact.firstName;
@@ -159,7 +152,7 @@ products: cart.map(item=>item.productId)
     };
   };  
 
-  //Last Name check with regex
+  //----Test de validité du Nom avec la methode regex----
   function lastNameCheck() {
 
     const lastNameT = order.contact.lastName;
@@ -177,7 +170,7 @@ products: cart.map(item=>item.productId)
     };
   };
 
-  //Adress check with regex
+  //  //----Test de validité de l'adresse avec la methode regex----
   function addressCheck(){
 
     const addressT = order.contact.address;
@@ -194,7 +187,7 @@ products: cart.map(item=>item.productId)
     };
   };
 
-  //City check with regex
+  //  //----Test de validité de la ville avec la methode regex----
   function cityCheck(){
 
     const cityT = order.contact.city;
@@ -211,7 +204,7 @@ products: cart.map(item=>item.productId)
     };
   };
 
-  //Email Check with regex
+  //----Test de validité de l'email avec la methode regex----
   function emailCheck(){
 
     const emailT = order.contact.email;
@@ -227,7 +220,7 @@ products: cart.map(item=>item.productId)
 
       };
   };
-
+//--------Vérifie que toutes les données du formulaire sont correctes et si oui confirme la commande------
  if (firstNameCheck() && lastNameCheck() && addressCheck() && emailCheck() && cityCheck() ){
   fetch("http://localhost:3000/api/products/order",{method:"POST",body:JSON.stringify(order), headers: { "Content-Type": "application/json" }})
   .then(response=>response.json())
@@ -238,24 +231,20 @@ products: cart.map(item=>item.productId)
  
   })
   .catch(error=>console.log(error))
-
-      //Create an object item JSON to stock all the datas in the local storage
-    //localStorage.clear();
     return true;
-    
+  //-------Sinon demande de vérifier le formulaire pour y corriger les fautes------ 
   }else {
     alert("Merci de vérifier le formulaire");
     return false;
 
   };
 
-  
   })}
+  //------Vérifie qu'on est sur la bonne page pour exécuter le code , sinon il est ignoré----
+  //------Affiche l'ID de commande sur la page de confirmation------
   if(cutUrl == "confirmation.html"){
     const spanId  = document.getElementById("orderId");
-
     let confirmationId = localStorage.getItem("orderId");
-
     spanId.innerHTML = confirmationId;
 }
 

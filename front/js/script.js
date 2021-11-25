@@ -1,3 +1,4 @@
+//------Récupère  les items depuis leur array, et les affiches sur la page------
 const itemsInDocument = document.getElementById('items')
 let arrayOfItems = [];
 const fetchProducts = async() =>{
