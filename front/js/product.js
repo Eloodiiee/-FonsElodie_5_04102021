@@ -91,7 +91,19 @@ Cartbtn.addEventListener("click", (event) => {
       console.log("test");
       const localStorage = window.localStorage 
       const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [] 
-      localStorage.setItem("cartItems",JSON.stringify(cartItems.concat(cartItem)))
+      if(cartItems.some(item=>item.productId===cartItem.productId)){ ////on verifie l'existence du cartitem qu'on va ajouter dans le localstorage si oui on incremente sont prix , son total et sa quantité sinon on l'ajoute au localstorage normalement
+       const itemToAdd = cartItems.find(item=>item.productId===cartItem.productId)
+      itemToAdd.quantityProduct+=cartItem.quantityProduct
+      itemToAdd.totalPrice+=cartItem.totalPrice
+      cartItems.splice(cartItems.map(item=>item.productId).indexOf(cartItem.productId),1,itemToAdd)
+      localStorage.setItem("cartItems",JSON.stringify(cartItems))
+
+      }
+      else{
+         localStorage.setItem("cartItems",JSON.stringify(cartItems.concat(cartItem)))
+      }
+      
+     
    }
    else{
       alert("Veuillez ajouter une couleur et une quantitée")

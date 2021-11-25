@@ -124,6 +124,59 @@ alert("Ce produit à bien été supprimé du panier");
 window.location.href = "cart.html";
 });
 }
+////////////////////////////////////////////////////////////////
+  // Form elements
+  ////////////////////////////////////////////////////////////////
+  
+  //// REGEXs (no regex for address form nor first name, last name or city)
+  // email
+  const emailErrorMsg = document.getElementById("emailErrorMsg");
+  function validateEmail(email) {
+    const regexMail =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (regexMail.test(email) == false) {
+      emailErrorMsg.innerHTML = "Entrez une adresse e-mail valide.";
+    } else {
+      emailErrorMsg.innerHTML = null;
+    }
+  }
+  // simple RegEx for names : caratères acceptés par la RegEx
+  const regexName =
+    /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+  // first name
+  const firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
+  function validateFirstName(firstName) {
+    if (regexName.test(firstName) == false) {
+      firstNameErrorMsg.innerHTML = "Entrez un prénom valide sans chiffre.";
+    } else {
+      firstNameErrorMsg.innerHTML = null;
+    }
+  }
+  
+  // last name
+  const lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+  function validateLastName(lastName) {
+    if (regexName.test(lastName) == false) {
+      lastNameErrorMsg.innerHTML = "Entrez un nom valide sans chiffre.";
+    } else {
+      lastNameErrorMsg.innerHTML = null;
+    }
+  }
+  
+  // city
+  const cityErrorMsg = document.getElementById("cityErrorMsg");
+  function validateCity(city) {
+    if (regexName.test(city) == false) {
+      cityErrorMsg.innerHTML = "Entrez une commune valide sans chiffre.";
+    } else {
+      cityErrorMsg.innerHTML = null;
+    }
+  }
+  validateEmail();
+  validateFirstName();
+  validateLastName();
+  validateCity();
+  
 const btnSendFormular = document.getElementById("order")
 //let btnSendFormular = document.getElementsByClassName("cart__order__form__submit");
 console.log(btnSendFormular);
@@ -133,7 +186,7 @@ console.log(btnSendFormular);
     eventSecure.preventDefault();
     
   console.log("coucou");
-    //Here is the const to catch all the data's from my formular
+    //Formulaire client
   
   const order = {
   contact: {
@@ -148,6 +201,8 @@ console.log(btnSendFormular);
 products: cart.map(item=>item.productId)
 
   }
+    
+
 
   fetch("http://localhost:3000/api/products/order",{method:"POST",body:JSON.stringify(order), headers: { "Content-Type": "application/json" }})
   .then(response=>response.json())
