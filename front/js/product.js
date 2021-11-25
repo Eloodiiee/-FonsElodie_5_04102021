@@ -10,13 +10,11 @@ await fetch("http://localhost:3000/api/products/"+_id)
    .then(response =>{return response.json()})
     .then(product=> {
       fetchedProduct = product
-       console.log(product);
        document.getElementsByClassName('item__img')[0].innerHTML = ` <img src=${product.imageUrl} alt=${product.altTxt}></div>`
        document.getElementById('title').innerHTML = product.name
        document.getElementById('price').innerHTML = product.price
        document.getElementById('description').innerHTML = product.description 
        document.getElementById('colors').innerHTML += product.colors.map(color=>`<option value="${color}">${color}</option>`)
-       console.log(document.getElementById('colors'));
      } );
         };
       
@@ -86,13 +84,12 @@ Cartbtn.addEventListener("click", (event) => {
       altTxt : fetchedProduct.altTxt,
       idDeletion : idDeletion, //----**Attribution de l'ID de suppression**----
    }
-   console.log(colorprdt);
+ 
       if(colorprdt && qtyNumber){
-      console.log("test");
       const localStorage = window.localStorage 
       const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [] 
-      if(cartItems.some(item=>item.productId===cartItem.productId)){ ////on verifie l'existence du cartitem qu'on va ajouter dans le localstorage si oui on incremente sont prix , son total et sa quantité sinon on l'ajoute au localstorage normalement
-       const itemToAdd = cartItems.find(item=>item.productId===cartItem.productId)
+      if(cartItems.some(item=>item.productId === cartItem.productId) && cartItems.some(item=>item.color === cartItem.color)){ ////on verifie l'existence du cartitem qu'on va ajouter dans le localstorage si oui on incremente sont prix , son total et sa quantité sinon on l'ajoute au localstorage normalement
+      const itemToAdd = cartItems.find(item=>item.productId===cartItem.productId)
       itemToAdd.quantityProduct+=cartItem.quantityProduct
       itemToAdd.totalPrice+=cartItem.totalPrice
       cartItems.splice(cartItems.map(item=>item.productId).indexOf(cartItem.productId),1,itemToAdd)
@@ -108,7 +105,6 @@ Cartbtn.addEventListener("click", (event) => {
    else{
       alert("Veuillez ajouter une couleur et une quantitée")
    }
-   console.log(cartItem);
  });
 
  

@@ -1,17 +1,14 @@
-if(window.location.href == "http://127.0.0.1:5500/front/html/cart.html"){
+const currentUrl = window.location.pathname ;
+let cutUrl = currentUrl.slice(12)
+if(cutUrl == "cart.html"){
 let cart  = JSON.parse(localStorage.getItem("cartItems"))||[];
 const cartContent = document.querySelector("#cart__items");
 //------Tentative de detection de doublon dans le panier------
 for(let k = 0;k<cart.length;k++){
 for(let article of cart){
-  console.log(article);
-  console.log(article.productId);
   if(article.productId == cart[k].productId && article.color == cart[k].color){
     let newQuantity = 0;
     newQuantity = parseInt(article.quantityProduct)+parseInt(cart[k].quantityProduct);
-    console.log("article :"+ article.quantityProduct);
-    console.log("cart :"+ cart[k].quantityProduct);
-    console.log(newQuantity);
   }
 }
 }
@@ -84,7 +81,7 @@ for (let q = 0; q < quantityField.length; q++){ //------Pour chaque input de qua
       "cartItems",
       JSON.stringify(cart)
     );
-    console.log(cart);
+  
     if(cart[q].quantityProduct.length === 0){ //----Vérifie s'il n'y a aucuns caractères dans l'input et le met a zéro si c'est le cas----
       cart[q].quantityProduct=0;
     }
@@ -101,18 +98,14 @@ for (let q = 0; q < quantityField.length; q++){ //------Pour chaque input de qua
 //----------------------------Gestion du boutton supprimer de l'article--------------------------------------------
 //---------------Sélection des références de tous les boutons suprimer------------------
 let deleteItem = document.querySelectorAll(".deleteItem");  
-console.log(deleteItem);
 for (let l = 0; l < deleteItem.length; l++) {
     deleteItem[l].addEventListener("click", (event) => {
     event.preventDefault();
 //---- L'id du produit va être supprimé en cliquant sur le bouton 
 let id_cart__item__content__settings__delete = cart[l].idDeletion;
-console.log("cart__item__content__settings__delete");
-console.log(id_cart__item__content__settings__delete);
 //avec la méthode filter je sélectionne les éléments à garder et je supprime l'élément où le bouton supprimer a été cliqué----
 cart = cart.filter(el => el.idDeletion !== id_cart__item__content__settings__delete
 );
-console.log(cart);
 //--------On envoie la variable dans le localstorage
 //--------La transformation en format JSON et l'envoyer dans la key "cartItems" du localstorage
 localStorage.setItem(
@@ -124,68 +117,13 @@ alert("Ce produit à bien été supprimé du panier");
 window.location.href = "cart.html";
 });
 }
-////////////////////////////////////////////////////////////////
-  // Form elements
-  ////////////////////////////////////////////////////////////////
-  
-  //// REGEXs (no regex for address form nor first name, last name or city)
-  // email
-  const emailErrorMsg = document.getElementById("emailErrorMsg");
-  function validateEmail(email) {
-    const regexMail =
-      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (regexMail.test(email) == false) {
-      emailErrorMsg.innerHTML = "Entrez une adresse e-mail valide.";
-    } else {
-      emailErrorMsg.innerHTML = null;
-    }
-  }
-  // simple RegEx for names : caratères acceptés par la RegEx
-  const regexName =
-    /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-  // first name
-  const firstNameErrorMsg = document.getElementById("firstNameErrorMsg");
-  function validateFirstName(firstName) {
-    if (regexName.test(firstName) == false) {
-      firstNameErrorMsg.innerHTML = "Entrez un prénom valide sans chiffre.";
-    } else {
-      firstNameErrorMsg.innerHTML = null;
-    }
-  }
-  
-  // last name
-  const lastNameErrorMsg = document.getElementById("lastNameErrorMsg");
-  function validateLastName(lastName) {
-    if (regexName.test(lastName) == false) {
-      lastNameErrorMsg.innerHTML = "Entrez un nom valide sans chiffre.";
-    } else {
-      lastNameErrorMsg.innerHTML = null;
-    }
-  }
-  
-  // city
-  const cityErrorMsg = document.getElementById("cityErrorMsg");
-  function validateCity(city) {
-    if (regexName.test(city) == false) {
-      cityErrorMsg.innerHTML = "Entrez une commune valide sans chiffre.";
-    } else {
-      cityErrorMsg.innerHTML = null;
-    }
-  }
-  validateEmail();
-  validateFirstName();
-  validateLastName();
-  validateCity();
   
 const btnSendFormular = document.getElementById("order")
 //let btnSendFormular = document.getElementsByClassName("cart__order__form__submit");
-console.log(btnSendFormular);
 
 //-------------- The btn with all the instructions for formular send --------------
   btnSendFormular.addEventListener("click", (eventSecure) =>{
     eventSecure.preventDefault();
-    
-  console.log("coucou");
     //Formulaire client
   
   const order = {
@@ -201,9 +139,96 @@ console.log(btnSendFormular);
 products: cart.map(item=>item.productId)
 
   }
-    
+   
+  //First name check with regex
+  function firstNameCheck() {
 
+    const firstNameT = order.contact.firstName;
+   
+  
+    if (/^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$/.test(firstNameT)) {
 
+      return true;
+
+      } else{
+
+        let firstNameErrorMess = document.getElementById('firstNameErrorMsg'); 
+        firstNameErrorMess.textContent = ("Le champs Prénom renseigné n'est pas correct !");
+        return false;
+
+    };
+  };  
+
+  //Last Name check with regex
+  function lastNameCheck() {
+
+    const lastNameT = order.contact.lastName;
+  
+    if(/^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$/.test(lastNameT)) {
+
+      return true;
+
+      } else{        
+
+        let lastNameErrorMess = document.getElementById('lastNameErrorMsg'); 
+        lastNameErrorMess.textContent = ("Le champs Nom renseigné n'est pas correct !");
+        return false;
+        
+    };
+  };
+
+  //Adress check with regex
+  function addressCheck(){
+
+    const addressT = order.contact.address;
+  
+    if(/^[a-zA-Z0-9-,\s]{5,50}$/.test(addressT)) {
+      return true;
+
+      } else{
+        let adressNameErrorMess = document.getElementById('addressErrorMsg'); 
+        adressNameErrorMess.textContent = ("Le champs Adresse renseigné n'est pas correct !"); 
+  
+        return false;
+               
+    };
+  };
+
+  //City check with regex
+  function cityCheck(){
+
+    const cityT = order.contact.city;
+  
+    if(/^[a-zA-Z- ]{3,20}$/.test(cityT)) {
+      return true;
+
+      } else{
+        let cityNameErrorMess = document.getElementById('cityErrorMsg'); 
+        cityNameErrorMess.textContent = ("Le champs Ville renseigné n'est pas correct !"); 
+
+        return false;
+            
+    };
+  };
+
+  //Email Check with regex
+  function emailCheck(){
+
+    const emailT = order.contact.email;
+  
+    if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailT)) {
+      return true;
+
+      } else{
+        let emailNameErrorMess = document.getElementById('emailErrorMsg'); 
+        emailNameErrorMess.textContent = ("Le champs Email renseigné n'est pas correct !"); 
+
+        return false;   
+
+      };
+  };
+
+ if (firstNameCheck() && lastNameCheck() && addressCheck() && emailCheck() && cityCheck() ){
   fetch("http://localhost:3000/api/products/order",{method:"POST",body:JSON.stringify(order), headers: { "Content-Type": "application/json" }})
   .then(response=>response.json())
   .then(data=>{
@@ -216,14 +241,21 @@ products: cart.map(item=>item.productId)
 
       //Create an object item JSON to stock all the datas in the local storage
     //localStorage.clear();
+    return true;
+    
+  }else {
+    alert("Merci de vérifier le formulaire");
+    return false;
+
+  };
 
   
   })}
-  if(window.location.href == "http://127.0.0.1:5500/front/html/confirmation.html"){
+  if(cutUrl == "confirmation.html"){
     const spanId  = document.getElementById("orderId");
-    console.log(spanId);
+
     let confirmationId = localStorage.getItem("orderId");
-    console.log(confirmationId);
+
     spanId.innerHTML = confirmationId;
 }
 
