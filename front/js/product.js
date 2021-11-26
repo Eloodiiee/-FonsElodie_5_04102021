@@ -110,4 +110,6 @@ Cartbtn.addEventListener("click", (event) => {
 
 
  
-
+//------ Pour ma boucle if de .some si on prend le kanap cynopé en bleu et qu'on le reprend encore une fois ça fusionne bien les deux en un. 
+//-----mais ça le faisait aussi si la couleur été différente sur le kanap similaire ( tout se regrouper en 1 pour un meme canapé).J'ai corrigé en ajoutant un 
+//-----&& avec le .color , la ça marche parfaitement.

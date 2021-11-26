@@ -1,6 +1,6 @@
 //----Permet de raccourcir le lien au test de la page----
-const currentUrl = window.location.pathname ;
-let cutUrl = currentUrl.slice(12)
+const currentUrl = window.location.pathname ; //-- pathname garde que le chemin de dossier de la page, alors que href garde une adresse plus longue avec l'ip locale.
+let cutUrl = currentUrl.slice(12)    //------ on recupere la donnée d'avant qu'on converti en coupant le texte avant le 12ème caractères.
 //----Test pour savoir si on est sur la bonne page, pour qu'il s'exécute sinon il est ignoré----
 if(cutUrl == "cart.html"){
 let cart  = JSON.parse(localStorage.getItem("cartItems"))||[];
