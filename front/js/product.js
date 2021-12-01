@@ -4,7 +4,7 @@ const _id = currentUrl.get('id');
 let fetchedProduct = null
 
 
-//------On récupère l'item depuis son array pour l'afficher suer la page------
+//------On récupère l'item depuis son array pour l'afficher sur la page------
 const fetchProductById = async() =>{
 await fetch("http://localhost:3000/api/products/"+_id)
    .then(response =>{return response.json()})
