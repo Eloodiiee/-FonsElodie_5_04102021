@@ -245,5 +245,6 @@ products: cart.map(item=>item.productId)
     const spanId  = document.getElementById("orderId");
     let confirmationId = localStorage.getItem("orderId");
     spanId.innerHTML = confirmationId;
+    localStorage.clear();
 }
 
