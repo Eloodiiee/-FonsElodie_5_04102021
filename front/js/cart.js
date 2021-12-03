@@ -112,8 +112,127 @@ window.location.href = "cart.html";
 }
   
 const btnSendFormular = document.getElementById("order")
+ //----Test de validité du Prénom avec la methode regex------
+  function firstNameCheck2()   {
 
+  const firstNameT2 = document.getElementById("firstName").value;
+ 
 
+  if (/^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$/.test(firstNameT2)) {
+    let firstNameErrorMess2 = document.getElementById('firstNameErrorMsg'); 
+    firstNameErrorMess2.textContent = ("");
+    return true;
+
+    } else{
+
+      let firstNameErrorMess2 = document.getElementById('firstNameErrorMsg'); 
+      firstNameErrorMess2.textContent = ("Le champs Prénom renseigné n'est pas correct !");
+      return false;
+
+  };
+};  
+function lastNameCheck2()   {
+
+  const lastNameT2 = document.getElementById("lastName").value;
+ 
+
+  if (/^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$/.test(lastNameT2)) {
+    let lastNameErrorMess2 = document.getElementById('lastNameErrorMsg'); 
+    lastNameErrorMess2.textContent = ("");
+    return true;
+
+    } else{
+
+      let lastNameErrorMess2 = document.getElementById('lastNameErrorMsg'); 
+      lastNameErrorMess2.textContent = ("Le champs Nom renseigné n'est pas correct !");
+      return false;
+
+  };
+};  
+function addressCheck2()   {
+
+  const addressT2 = document.getElementById("address").value;
+ 
+
+  if(/^[a-zA-Z0-9-,\s]{5,50}$/.test(addressT2)) {
+    let addressErrorMess2 = document.getElementById('addressErrorMsg'); 
+   addressErrorMess2.textContent = ("");
+    return true;
+
+    } else{
+
+      let addressErrorMess2 = document.getElementById('addressErrorMsg'); 
+      addressErrorMess2.textContent = ("Le champs adresse renseigné n'est pas correct !");
+      return false;
+
+  };
+}; 
+ function cityCheck2()   {
+
+  const cityT2 = document.getElementById("city").value;
+ 
+
+  if(/^[a-zA-Z- ]{3,20}$/.test(cityT2)) {
+    let cityErrorMess2 = document.getElementById('cityErrorMsg'); 
+   cityErrorMess2.textContent = ("");
+    return true;
+
+    } else{
+
+      let cityErrorMess2 = document.getElementById('cityErrorMsg'); 
+      cityErrorMess2.textContent = ("Le champs ville renseigné n'est pas correct !");
+      return false;
+
+  };
+}; 
+function emailCheck2()   {
+
+  const emailT2 = document.getElementById("email").value;
+ 
+
+  if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailT2)) {
+    let emailErrorMess2 = document.getElementById('emailErrorMsg'); 
+    emailErrorMess2.textContent = ("");
+    return true;
+
+    } else{
+
+      let emailErrorMess2 = document.getElementById('emailErrorMsg'); 
+      emailErrorMess2.textContent = ("Le champs email renseigné n'est pas correct !");
+      return false;
+
+  };
+}; 
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------
+const fistNameInput = document.getElementById("firstName")
+fistNameInput.addEventListener("input", (eventSecure) =>{
+  eventSecure.preventDefault();
+  firstNameCheck2();
+})
+const lastNameInput2 = document.getElementById("lastName")
+lastNameInput2.addEventListener("input", (eventSecure) =>{
+  eventSecure.preventDefault();
+  lastNameCheck2();
+})
+const addressInput2 = document.getElementById("address")
+addressInput2.addEventListener("input", (eventSecure) =>{
+  eventSecure.preventDefault();
+  addressCheck2();
+
+})
+const cityInput2 = document.getElementById("city")
+cityInput2.addEventListener("input", (eventSecure) =>{
+  eventSecure.preventDefault();
+  cityCheck2();
+
+})
+const emailInput2 = document.getElementById("email")
+emailInput2.addEventListener("input", (eventSecure) =>{
+  eventSecure.preventDefault();
+  emailCheck2();
+
+})
 //--------------Au clic du bouton "commander", enregistre les informations du formulaire, tout en testant si les données sont correctes--------------
   btnSendFormular.addEventListener("click", (eventSecure) =>{
     eventSecure.preventDefault();
@@ -133,100 +252,14 @@ products: cart.map(item=>item.productId)
 
   }
    
-  //----Test de validité du Prénom avec la methode regex------
-  function firstNameCheck() {
-
-    const firstNameT = order.contact.firstName;
-   
-  
-    if (/^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$/.test(firstNameT)) {
-
-      return true;
-
-      } else{
-
-        let firstNameErrorMess = document.getElementById('firstNameErrorMsg'); 
-        firstNameErrorMess.textContent = ("Le champs Prénom renseigné n'est pas correct !");
-        return false;
-
-    };
-  };  
-
-  //----Test de validité du Nom avec la methode regex----
-  function lastNameCheck() {
-
-    const lastNameT = order.contact.lastName;
-  
-    if(/^[A-Za-z]+((\s)?((\'|\-|\.)?([A-Za-z])+))*$/.test(lastNameT)) {
-
-      return true;
-
-      } else{        
-
-        let lastNameErrorMess = document.getElementById('lastNameErrorMsg'); 
-        lastNameErrorMess.textContent = ("Le champs Nom renseigné n'est pas correct !");
-        return false;
-        
-    };
-  };
-
-  //  //----Test de validité de l'adresse avec la methode regex----
-  function addressCheck(){
-
-    const addressT = order.contact.address;
-  
-    if(/^[a-zA-Z0-9-,\s]{5,50}$/.test(addressT)) {
-      return true;
-
-      } else{
-        let adressNameErrorMess = document.getElementById('addressErrorMsg'); 
-        adressNameErrorMess.textContent = ("Le champs Adresse renseigné n'est pas correct !"); 
-  
-        return false;
-               
-    };
-  };
-
-  //  //----Test de validité de la ville avec la methode regex----
-  function cityCheck(){
-
-    const cityT = order.contact.city;
-  
-    if(/^[a-zA-Z- ]{3,20}$/.test(cityT)) {
-      return true;
-
-      } else{
-        let cityNameErrorMess = document.getElementById('cityErrorMsg'); 
-        cityNameErrorMess.textContent = ("Le champs Ville renseigné n'est pas correct !"); 
-
-        return false;        
-    };
-  };
-
-  //----Test de validité de l'email avec la methode regex----
-  function emailCheck(){
-
-    const emailT = order.contact.email;
-  
-    if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailT)) {
-      return true;
-
-      } else{
-        let emailNameErrorMess = document.getElementById('emailErrorMsg'); 
-        emailNameErrorMess.textContent = ("Le champs Email renseigné n'est pas correct !"); 
-
-        return false;   
-
-      };
-  };
 //--------Vérifie que toutes les données du formulaire sont correctes et si oui confirme la commande------
- if (firstNameCheck() && lastNameCheck() && addressCheck() && emailCheck() && cityCheck() ){
+ if (firstNameCheck2() && lastNameCheck2() && addressCheck2() && emailCheck2() && cityCheck2() ){
   fetch("http://localhost:3000/api/products/order",{method:"POST",body:JSON.stringify(order), headers: { "Content-Type": "application/json" }})
   .then(response=>response.json())
   .then(data=>{
-    localStorage.clear();
-    localStorage.setItem("orderId",data.orderId)
-    window.location.href = "confirmation.html";
+    localStorage.removeItem("cartItems");
+    //localStorage.setItem("orderId",data.orderId)
+    window.location.href = `confirmation.html?id=${data.orderId}`;
  
   })
   .catch(error=>console.log(error))
@@ -242,9 +275,8 @@ products: cart.map(item=>item.productId)
   //------Vérifie qu'on est sur la bonne page pour exécuter le code , sinon il est ignoré----
   //------Affiche l'ID de commande sur la page de confirmation------
   if(cutUrl == "confirmation.html"){
-    const spanId  = document.getElementById("orderId");
-    let confirmationId = localStorage.getItem("orderId");
-    spanId.innerHTML = confirmationId;
-    localStorage.clear();
-}
-
+    const spanId  = document.getElementById("orderId")
+    const currentUrl = (new URL(document.location)).searchParams ;
+    const ID = currentUrl.get('id');
+    spanId.innerHTML = ID;
+  }

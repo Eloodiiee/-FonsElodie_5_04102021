@@ -84,6 +84,7 @@ Cartbtn.addEventListener("click", (event) => {
       altTxt : fetchedProduct.altTxt,
       idDeletion : idDeletion, //----Attribution de l'ID de suppression----
    }
+   
  //---------Détection de doublon dans la panier à partir de la couleur et de l'ID et les cumule s'il en trouve------ 
       if(colorprdt && qtyNumber){
       const localStorage = window.localStorage 
@@ -99,11 +100,12 @@ Cartbtn.addEventListener("click", (event) => {
       else{
          localStorage.setItem("cartItems",JSON.stringify(cartItems.concat(cartItem)))
       }
-      
+      alert("Produit(s) ajouté(s) au panier");
    }
    else{
       alert("Veuillez ajouter une couleur et une quantitée")
    }
+   
  });
 
  
