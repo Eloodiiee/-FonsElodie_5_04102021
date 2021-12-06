@@ -67,7 +67,7 @@ Cartbtn.addEventListener("click", (event) => {
    let prdtName = productName(); //------Execute la fonction productname pour sauvegarder le résultat de prdtname------
    let colorprdt = productClr();
    let idDeletion = randomHexId();//------Exécute la fonction qui génère un ID en hexadecimal----
-   let price = parseInt(Price()); //------Convertie du texte en nombre entier------
+   let price = parseInt(Price()); //------Convertie du texte en nombre entier--------
    let cartItem = {
       name: prdtName,
       color: colorprdt,
