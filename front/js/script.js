@@ -21,7 +21,7 @@ fetch("http://localhost:3000/api/products")//-------
 
   let productsDescription = document.createElement('p');//---- créé une balise "p"----
   productsDescription.classList.add('productDescription');//---- ajoute une classe à mon "p"-----
-  productsDescription.textContent = products[a].description;//------ ajoute la description du produit----
+  productsDescription.textContent = products[a].description;//------ ajoute la description du produit------
     
           
 
