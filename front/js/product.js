@@ -5,8 +5,8 @@ let fetchedProduct = null
 
 
 //------On récupère l'item depuis son array pour l'afficher sur la page------
-const fetchProductById = async() =>{
-await fetch("http://localhost:3000/api/products/"+_id)
+
+ fetch("http://localhost:3000/api/products/"+_id)
    .then(response =>{return response.json()})
     .then(product=> {
       fetchedProduct = product
@@ -16,10 +16,6 @@ await fetch("http://localhost:3000/api/products/"+_id)
        document.getElementById('description').innerHTML = product.description 
        document.getElementById('colors').innerHTML += product.colors.map(color=>`<option value="${color}">${color}</option>`)
      } );
-        };
-      
-  
-   fetchProductById()
 
    //-------------Génération d'ID en hexadécimal pour que le filter ne supprime pas deux même items, même s'ils ont des couleurs différentes----
    let id = 0;
@@ -72,19 +68,17 @@ Cartbtn.addEventListener("click", (event) => {
    let colorprdt = productClr();
    let idDeletion = randomHexId();//------Exécute la fonction qui génère un ID en hexadecimal----
    let price = parseInt(Price()); //------Convertie du texte en nombre entier------
-   let totalPrice = price * qtyNumber;
    let cartItem = {
       name: prdtName,
       color: colorprdt,
       productId: _id,
       quantityProduct: qtyNumber,
       price:price,
-      totalPrice : totalPrice,
       imageUrl : fetchedProduct.imageUrl,
       altTxt : fetchedProduct.altTxt,
       idDeletion : idDeletion, //----Attribution de l'ID de suppression----
    }
-   
+ 
  //---------Détection de doublon dans la panier à partir de la couleur et de l'ID et les cumule s'il en trouve------ 
       if(colorprdt && qtyNumber){
       const localStorage = window.localStorage 
@@ -92,7 +86,6 @@ Cartbtn.addEventListener("click", (event) => {
       if(cartItems.some(item=>item.productId === cartItem.productId) && cartItems.some(item=>item.color === cartItem.color)){ //------on verifie l'existence du cartitem qu'on va ajouter dans le localstorage si oui on incremente sont prix , son total et sa quantité sinon on l'ajoute au localstorage normalement
       const itemToAdd = cartItems.find(item=>item.productId===cartItem.productId)
       itemToAdd.quantityProduct+=cartItem.quantityProduct
-      itemToAdd.totalPrice+=cartItem.totalPrice
       cartItems.splice(cartItems.map(item=>item.productId).indexOf(cartItem.productId),1,itemToAdd)
       localStorage.setItem("cartItems",JSON.stringify(cartItems))
 
