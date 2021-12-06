@@ -6,7 +6,7 @@ let cutUrl = currentUrl.slice(12)    //------ on recupere la donnée d'avant qu'
 if(cutUrl == "cart.html"){
 let cart  = JSON.parse(localStorage.getItem("cartItems"))||[];
 const cartContent = document.querySelector("#cart__items");
-//------Si le panier est vide afficher "le panier est vide"------
+//--------------Si le panier est vide afficher "le panier est vide"--------
 if(cart === null || cart == 0 ){
   const emptyCart = `
   <style type="text/css">
