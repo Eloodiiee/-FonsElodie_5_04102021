@@ -4,7 +4,7 @@ const _id = currentUrl.get('id');
 let fetchedProduct = null
 
 
-//------On récupère l'item depuis son array pour l'afficher sur la page------
+//------On récupère l'item depuis son array pour l'afficher sur la page------** fetch sorti de sa fonction (j'ai enlevé le CONST)****
 
  fetch("http://localhost:3000/api/products/"+_id)
    .then(response =>{return response.json()})
@@ -27,26 +27,12 @@ let fetchedProduct = null
 
 //------------La gestion de mon panier--------------
 
-//-----------Fonction de récupération du nom depuis le HTML--------
-
-function productName() {
-   let prdtName = document.getElementById("title");
-   return prdtName.textContent;
-}
-
 //-----------Fonction de récupération de la couleur, à partir de la couleur sélectionnée dans le Menu déroulant depuis le HTML--------
 
 function productClr() {
    let select = document.getElementById("colors"); //-----------Récupération du Menu déroulant à partir de son ID------
    let option = select.options[select.selectedIndex] ; //--------Récupération de la couleur sélectionnée dans le Menu déroulant------
    return select.selectedIndex !== 0 ? option.text : null ; //------Fin de fonction en attribuant à colorprdt le texte, dans le cas présent on aurait pu récupérer la valeur aussi car elle est identique----
-}
-
-//----------Fonction de récupération  à partir de la fonction "sélectionner" depuis le HTML---------
-
-function Price() {
-   let price = document.getElementById("price");
-   return price.textContent;
 }
 
 //----------Fonction de récupération de la valeur à partir de la fonction "quantitynumber" depuis le HTML---------
@@ -64,18 +50,12 @@ const Cartbtn = document.getElementById("addToCart")
 Cartbtn.addEventListener("click", (event) => {
    event.preventDefault(); //---------------------Commande qui sécurise l'exécution du code , uniquement au clic de ce Bouton------
    let qtyNumber = parseInt(quantityNumber()); //------Convertie du texte en nombre entier------
-   let prdtName = productName(); //------Execute la fonction productname pour sauvegarder le résultat de prdtname------
    let colorprdt = productClr();
    let idDeletion = randomHexId();//------Exécute la fonction qui génère un ID en hexadecimal----
-   let price = parseInt(Price()); //------Convertie du texte en nombre entier--------
    let cartItem = {
-      name: prdtName,
       color: colorprdt,
       productId: _id,
       quantityProduct: qtyNumber,
-      price:price,
-      imageUrl : fetchedProduct.imageUrl,
-      altTxt : fetchedProduct.altTxt,
       idDeletion : idDeletion, //----Attribution de l'ID de suppression----
    }
  
@@ -93,7 +73,7 @@ Cartbtn.addEventListener("click", (event) => {
       else{
          localStorage.setItem("cartItems",JSON.stringify(cartItems.concat(cartItem)))
       }
-      alert("Produit(s) ajouté(s) au panier");
+      alert("Produit(s) ajouté(s) au panier");//--**message d'ajout au panier rajouté***
    }
    else{
       alert("Veuillez ajouter une couleur et une quantitée")

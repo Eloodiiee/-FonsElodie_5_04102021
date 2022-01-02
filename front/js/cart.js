@@ -1,4 +1,6 @@
-const blackFridaysales = 0.5; //------ soldes -----**
+let totalItems = 0;
+let totalPriceCart = 0;
+const sectionCart = document.getElementById('cart__items')
 //----Permet de raccourcir le lien au test de la page----
 const currentUrl = window.location.pathname ; //-- pathname garde que le chemin de dossier de la page, alors que href garde une adresse plus longue avec l'ip locale.
 let cutUrl = currentUrl.slice(12)    //------ on recupere la donnée d'avant qu'on converti en coupant le texte avant le 12ème caractères.
@@ -25,46 +27,89 @@ if(cart === null || cart == 0 ){
 }
 //------Sinon remplir le panier------
 else{
-let fullCart = [];
-for (let i = 0; i < cart.length; i++) {
-  if(blackFridaysales < 1 && blackFridaysales > 0.1 ){//---**** detecte s'il y a des soldes et les applique----
-    cart[i].price = cart[i].price*blackFridaysales;
-  }
-    fullCart += ` 
-    <article class="cart__item" data-id="${cart[i].productId}">
-    <div class="cart__item__img">
-    <img src=${cart[i].imageUrl} alt=${cart[i].altTxt}">
-  </div>
-  <div class="cart__item__content">
-                  <div class="cart__item__content__titlePrice">
-                    <h2>${cart[i].name}</h2>
-                    <p>${cart[i].color}</p>
-                    <p>${cart[i].price}€</p>
-                    
-                  </div>
-                  <div class="cart__item__content__settings">
-                    <div class="cart__item__content__settings__quantity">
-                      <p>Qté : </p>
-                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${cart[i].quantityProduct}">
-                    </div>
-                    <div class="cart__item__content__settings__delete">
-                      <p class="deleteItem">Supprimer</p>
-                    </div>
-                  </div>
-                </div>
-  </article>
-  `
-  let totalItems = 0;
-  let totalPriceCart = 0;
-  for (let o = 0; o < cart.length; o++) {
-    totalItems += parseInt(cart[o].quantityProduct)
-    totalPriceCart += cart[o].quantityProduct*cart[o].price;
-  }
-  cartContent.innerHTML = fullCart;
-  document.getElementById('totalQuantity').innerHTML =  totalItems;
-  document.getElementById('totalPrice').innerHTML = totalPriceCart;
-  }
-}
+
+const products = cart.map(async(item) => {  //----------Fetch des produits pour récupérer les prix, les imgs et les noms----
+  item.product = await fetch("http://localhost:3000/api/products/"+item.productId)
+    .then((response) => response.json());
+    return item;
+});
+
+const allProductInfo = Promise.all(products)
+  allProductInfo.then(itemsInCart => {
+    for (let i = 0; i < cart.length; i++){      //----------Création du panier à partir des éléments récupérés du fetch et du localstorage-----
+      let article = document.createElement('article'); 
+        article.classList.add('cart__item');
+        article.setAttribute('data-id', cart[i].productId);
+        
+        let divImg = document.createElement('div');
+        divImg.classList.add('cart__item__img');
+        
+        let productImg = document.createElement('img');
+        productImg.setAttribute('src', itemsInCart[i].product.imageUrl);
+        productImg.setAttribute('alt', itemsInCart[i].product.altTxt);
+        
+        let divContent = document.createElement('div');
+        divContent.classList.add('cart__item__content');
+
+        let divContentTitlePrice = document.createElement('div');
+        divContentTitlePrice.classList.add('cart__item__content__titlePrice');
+
+        let productTitle = document.createElement('h2');
+        productTitle.textContent = itemsInCart[i].product.name;
+
+        let productColor = document.createElement('p');
+        productColor.textContent = cart[i].color;
+
+        let productPrice = document.createElement('p');
+        productPrice.classList.add('priceCalc');
+        productPrice.textContent = itemsInCart[i].product.price + "€";
+
+        let divContentSettings = document.createElement('div');
+        divContentSettings.classList.add('cart__item__content__settings');
+
+        let divContentSettingsQuantity = document.createElement('div');
+        divContentSettingsQuantity.classList.add('cart__item__content__settings__quantity');
+
+        let productQuantity = document.createElement('p');
+        productQuantity.textContent = "Qté : ";
+
+
+        let quantityInput = document.createElement('INPUT');//----------Création de l'INPUT de quantité----****
+        quantityInput.classList.add('itemQuantity');
+        quantityInput.setAttribute('type', 'number');
+        quantityInput.setAttribute('name', 'itemQuantity');
+        quantityInput.setAttribute('min', '1');
+        quantityInput.setAttribute('max', '100');
+        quantityInput.setAttribute('value', cart[i].quantityProduct);
+
+        let divDeleteButton = document.createElement('div');//----------Création du Bouton supprimé ----****
+        divDeleteButton.classList.add('cart__item__content__settings__delete');
+        let deleteButton = document.createElement('p');
+        deleteButton.classList.add('deleteItem');
+        deleteButton.textContent = "Supprimer";
+        //---------------------------
+        sectionCart.appendChild(article);
+          article.appendChild(divImg);
+            divImg.appendChild(productImg);
+          article.appendChild(divContent);
+            divContent.appendChild(divContentTitlePrice);
+                divContentTitlePrice.appendChild(productTitle);
+                divContentTitlePrice.appendChild(productColor);
+                divContentTitlePrice.appendChild(productPrice);
+            divContent.appendChild(divContentSettings);
+              divContentSettings.appendChild(divContentSettingsQuantity);
+                divContentSettingsQuantity.appendChild(productQuantity);
+                divContentSettingsQuantity.appendChild(quantityInput);
+              divContentSettings.appendChild(divDeleteButton);
+                divDeleteButton.appendChild(deleteButton);
+                
+      totalItems+= parseInt(cart[i].quantityProduct);//----------Mise à jour de la quantité des produits et du prix total------**** 
+      totalPriceCart+=itemsInCart[i].product.price*cart[i].quantityProduct;
+      document.getElementById('totalQuantity').innerHTML = totalItems;//----------Affichage de la quantité totale ----****
+      document.getElementById('totalPrice').innerHTML = totalPriceCart;//----------Affichage du prix total ----****
+    }
+
+    
 //----------------------------Gestion du changement de quantité des articles et mise à jour du prix--------------------------------------------
 
 let quantityField = document.querySelectorAll(".itemQuantity"); //------Je sélectionne l'input de quantité ----
@@ -73,25 +118,25 @@ for (let q = 0; q < quantityField.length; q++){ //------Pour chaque input de qua
     event.preventDefault();
     let quantityArticles = quantityField[q].value; //-------Attibution de la valeur de l'input dans "quantityArticles"----
     cart[q].quantityProduct = quantityArticles;//------Mise à jour de la quantité dans le cart.quantityProduct----
-    cart[q].totalPrice = cart[q].price * cart[q].quantityProduct;//------Recalcul du prix total d'un des objet de l'array cartItems----
     localStorage.setItem( //------Réenregistrement du panier --
       "cartItems",
-      JSON.stringify(cart)
-    );
-  
-    if(cart[q].quantityProduct.length === 0){ //----Vérifie s'il n'y a aucuns caractères dans l'input et le met a zéro si c'est le cas----
-      cart[q].quantityProduct=0;
-    }
-    let totalItems = 0;   //----Boucle qui recalcule le nombres d'items total ainsi que le prix total du panier--
-    let totalPriceCart = 0;
-    for (let u = 0; u < cart.length; u++) {
-      totalItems += parseInt(cart[u].quantityProduct)
-      totalPriceCart += cart[u].price*cart[u].quantityProduct;
-    }
-  document.getElementById('totalQuantity').innerHTML =  totalItems;   //----Affichage des nouvelles valeurs----
-  document.getElementById('totalPrice').innerHTML = totalPriceCart;
-  });
+    JSON.stringify(cart)
+);
+
+if(cart[q].quantityProduct.length === 0){ //----Vérifie s'il n'y a aucuns caractères dans l'input et le met a zéro si c'est le cas----
+  cart[q].quantityProduct= 0;
 }
+totalItems = 0; //----- Réinitialisation des valeurs----*****
+totalPriceCart = 0;   //----- Réinitialisation des valeurs----*****
+for(let u = 0; u < cart.length; u++){ //--- boucle qui recalcule la quantité totale et le prix total*****
+  totalItems+= parseInt(cart[u].quantityProduct);//------ Recalcul de la quantité totale----****
+  totalPriceCart+=parseInt(itemsInCart[u].product.price)*parseInt(cart[u].quantityProduct); //-----Recalcul du prix total******
+}
+document.getElementById('totalQuantity').innerHTML = totalItems;//------Mise à jour de la quantité totale *****
+document.getElementById('totalPrice').innerHTML = totalPriceCart;//------Mise à jour du prix total*****
+});
+}
+
 //----------------------------Gestion du boutton supprimer de l'article--------------------------------------------
 //---------------Sélection des références de tous les boutons suprimer------------------
 let deleteItem = document.querySelectorAll(".deleteItem");  
@@ -114,16 +159,22 @@ alert("Ce produit à bien été supprimé du panier");
 window.location.href = "cart.html";
 });
 }
+  })
+
+}
+
+
+
   
 const btnSendFormular = document.getElementById("order")
 
-//----Déclaration des variables et constantes regex--------
+//----Déclaration des variables et constantes regex--------**sorti de leurs fonctions sinon il aurait fallu créer d'autres constante pour les ADDEVENTLISTENER**
 const firstNameInput = document.getElementById("firstName");
 const lastNameInput = document.getElementById("lastName");
 const addressInput = document.getElementById("address");
 const cityInput = document.getElementById("city");
 const emailInput = document.getElementById("email");
-//--------------------------------------------------
+//--------------------------------------------------***sorti de leurs fonctions
 let firstNameErrorMess = document.getElementById('firstNameErrorMsg');
 let lastNameErrorMess = document.getElementById('lastNameErrorMsg');
 let addressErrorMess = document.getElementById('addressErrorMsg');
@@ -185,7 +236,7 @@ function emailCheck()   {
       return false;
   };
 }; 
-//----Déclenchement des test regex lors de la saisie des informations------------------
+//----Déclenchement des test regex lors de la saisie des informations------------------**
 //----Déclenchement des test regex du prénom------------------
 firstNameInput.addEventListener("input", (eventSecure) =>{
   eventSecure.preventDefault();
@@ -235,10 +286,8 @@ products: cart.map(item=>item.productId)
   fetch("http://localhost:3000/api/products/order",{method:"POST",body:JSON.stringify(order), headers: { "Content-Type": "application/json" }})
   .then(response=>response.json())
   .then(data=>{
-    localStorage.removeItem("cartItems");
-    //localStorage.setItem("orderId",data.orderId)
-    window.location.href = `confirmation.html?id=${data.orderId}`;
- 
+    localStorage.removeItem("cartItems");//**** a la place du clear qui est dangereux(peut supprimer des données qui étaient dans le local storage mais qui n'a rien avoir avec le site), j'ai mis un remove pour supprimer uniquement le panier**
+    window.location.href = `confirmation.html?id=${data.orderId}`;//**** Génère une url avec l'id de commande et redirige sur la page**
   })
   .catch(error=>console.log(error))
     return true;
@@ -254,7 +303,7 @@ products: cart.map(item=>item.productId)
   //------Affiche l'ID de commande sur la page de confirmation------
   if(cutUrl == "confirmation.html"){
     const spanId  = document.getElementById("orderId")
-    const currentUrl = (new URL(document.location)).searchParams ;
-    const ID = currentUrl.get('id');
-    spanId.innerHTML = ID;
+    const currentUrl = (new URL(document.location)).searchParams ;//**** Récupère l'URL **
+    const ID = currentUrl.get('id');//**et y extrait l'ID de commande**
+    spanId.innerHTML = ID;//**Affiche l'ID sur la page **
   }

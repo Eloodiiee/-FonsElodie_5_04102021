@@ -1,6 +1,6 @@
 //------Récupère  les items depuis leur array, et les affiches sur la page------
 const itemsInDocument = document.getElementById('items')
-fetch("http://localhost:3000/api/products")//------- 
+fetch("http://localhost:3000/api/products")//------- sorti le fetch de sa fonction****
 .then(response =>{return response.json()})
 .then(products=>{
   for (let a =0; a < products.length; a++){
@@ -33,6 +33,6 @@ fetch("http://localhost:3000/api/products")//-------
 
   link.appendChild(article);//---- l'article cest l'enfant la balise "a" c'est le parent ----
 
-  itemsInDocument.appendChild(link);//---- j'assigne les liens des articles (les enfants),au parent qui est la section "item" dans lesquels ils sont rangé  ------**
+  itemsInDocument.appendChild(link);//---- j'assigne les liens des articles (les enfants),au parent qui est la section "item" dans lesquels ils sont rangés  ------**
     
 }})
