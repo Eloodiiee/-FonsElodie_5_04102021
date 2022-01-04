@@ -39,13 +39,13 @@ const allProductInfo = Promise.all(products)
     for (let i = 0; i < cart.length; i++){      //----------Création du panier à partir des éléments récupérés du fetch et du localstorage-----
       let article = document.createElement('article'); 
         article.classList.add('cart__item');
-        article.setAttribute('data-id', cart[i].productId);
+        article.setAttribute('data-id', cart[i].productId);//--- Regarde l'ID du localstorage----
         
         let divImg = document.createElement('div');
         divImg.classList.add('cart__item__img');
         
         let productImg = document.createElement('img');
-        productImg.setAttribute('src', itemsInCart[i].product.imageUrl);
+        productImg.setAttribute('src', itemsInCart[i].product.imageUrl);//---- A partir de l'API ça récupère les informations qui ne sont pas dans le localstorage ----
         productImg.setAttribute('alt', itemsInCart[i].product.altTxt);
         
         let divContent = document.createElement('div');
@@ -126,6 +126,9 @@ for (let q = 0; q < quantityField.length; q++){ //------Pour chaque input de qua
 if(cart[q].quantityProduct.length === 0){ //----Vérifie s'il n'y a aucuns caractères dans l'input et le met a zéro si c'est le cas----
   cart[q].quantityProduct= 0;
 }
+if(cart[q].quantityProduct < 0){
+  cart[q].quantityProduct= 0;
+}
 totalItems = 0; //----- Réinitialisation des valeurs----*****
 totalPriceCart = 0;   //----- Réinitialisation des valeurs----*****
 for(let u = 0; u < cart.length; u++){ //--- boucle qui recalcule la quantité totale et le prix total*****
@@ -143,7 +146,7 @@ let deleteItem = document.querySelectorAll(".deleteItem");
 for (let l = 0; l < deleteItem.length; l++) {
     deleteItem[l].addEventListener("click", (event) => {
     event.preventDefault();
-//---- L'id du produit va être supprimé en cliquant sur le bouton 
+//---- Le produit va être supprimé en cliquant sur le bouton 
 let id_cart__item__content__settings__delete = cart[l].idDeletion;
 //avec la méthode filter je sélectionne les éléments à garder et je supprime l'élément où le bouton supprimer a été cliqué----
 cart = cart.filter(el => el.idDeletion !== id_cart__item__content__settings__delete

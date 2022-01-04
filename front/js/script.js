@@ -1,5 +1,5 @@
+const itemsInDocument = document.getElementById('items')//---- Sélectionne la section item dans mon html ---
 //------Récupère  les items depuis leur array, et les affiches sur la page------
-const itemsInDocument = document.getElementById('items')
 fetch("http://localhost:3000/api/products")//------- sorti le fetch de sa fonction****
 .then(response =>{return response.json()})
 .then(products=>{
