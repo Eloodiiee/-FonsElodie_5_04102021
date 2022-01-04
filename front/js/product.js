@@ -60,27 +60,29 @@ Cartbtn.addEventListener("click", (event) => {
    }
  
  //---------Détection de doublon dans la panier à partir de la couleur et de l'ID et les cumule s'il en trouve------ 
-      if(colorprdt && qtyNumber){
+ if(qtyNumber < 0){
+   alert("Veuillez ne pas mettre une quantité négative")
+}
+else{
+   if(colorprdt && qtyNumber){
       const localStorage = window.localStorage 
-      const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [] 
-      if(cartItems.some(item=>item.productId === cartItem.productId) && cartItems.some(item=>item.color === cartItem.color)){ //------on verifie l'existence du cartitem qu'on va ajouter dans le localstorage si oui on incremente sont prix , son total et sa quantité sinon on l'ajoute au localstorage normalement
-      const itemToAdd = cartItems.find(item=>item.productId===cartItem.productId)
-      itemToAdd.quantityProduct+=cartItem.quantityProduct
-      cartItems.splice(cartItems.map(item=>item.productId).indexOf(cartItem.productId),1,itemToAdd)
-      localStorage.setItem("cartItems",JSON.stringify(cartItems))
-
-      }
-      else{
-         localStorage.setItem("cartItems",JSON.stringify(cartItems.concat(cartItem)))
-      }
-      alert("Produit(s) ajouté(s) au panier");//--**message d'ajout au panier rajouté***
+      const cartItems = JSON.parse(localStorage.getItem("cartItems")) || []
+         if(cartItems.some(item=>item.productId === cartItem.productId) && cartItems.some(item=>item.color === cartItem.color)){ //------on verifie l'existence du cartitem qu'on va ajouter dans le localstorage si oui on incremente sont prix , son total et sa quantité sinon on l'ajoute au localstorage normalement
+            const itemToAdd = cartItems.find(item=>item.productId===cartItem.productId)
+            itemToAdd.quantityProduct+=cartItem.quantityProduct
+            cartItems.splice(cartItems.map(item=>item.productId).indexOf(cartItem.productId),1,itemToAdd)
+            localStorage.setItem("cartItems",JSON.stringify(cartItems))
+         }
+         else{
+            localStorage.setItem("cartItems",JSON.stringify(cartItems.concat(cartItem)))
+         }
+   alert("Produit(s) ajouté(s) au panier");
    }
    else{
       alert("Veuillez ajouter une couleur et une quantitée")
    }
-   
- });
-
+}
+});
  
 
 
