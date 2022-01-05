@@ -1,11 +1,8 @@
 let totalItems = 0;
 let totalPriceCart = 0;
 const sectionCart = document.getElementById('cart__items')
-//----Permet de raccourcir le lien au test de la page----
-const currentUrl = window.location.pathname ; //-- pathname garde que le chemin de dossier de la page, alors que href garde une adresse plus longue avec l'ip locale.
-let cutUrl = currentUrl.slice(12)    //------ on recupere la donnée d'avant qu'on converti en coupant le texte avant le 12ème caractères.
 //----Test pour savoir si on est sur la bonne page, pour qu'il s'exécute sinon il est ignoré----
-if(cutUrl == "cart.html"){
+if(document.URL.includes('cart.html')){
 let cart  = JSON.parse(localStorage.getItem("cartItems"))||[];
 const cartContent = document.querySelector("#cart__items");
 //--------------Si le panier est vide afficher "le panier est vide"--------
@@ -304,7 +301,7 @@ products: cart.map(item=>item.productId)
   })}
   //------Vérifie qu'on est sur la bonne page pour exécuter le code , sinon il est ignoré----
   //------Affiche l'ID de commande sur la page de confirmation------
-  if(cutUrl == "confirmation.html"){
+  if(document.URL.includes('confirmation.html')){
     const spanId  = document.getElementById("orderId")
     const currentUrl = (new URL(document.location)).searchParams ;//**** Récupère l'URL **
     const ID = currentUrl.get('id');//**et y extrait l'ID de commande**
